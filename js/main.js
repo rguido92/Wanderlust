@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * Wanderlust - Main JavaScript
+ * wanderland - Main JavaScript
  * ==========================================================================
  * 
  * Este archivo inicializa la aplicación y maneja la funcionalidad principal
@@ -416,7 +416,7 @@ function handleOnline() {
 // Inicialización principal
 // ==========================================================================
 function init() {
-  console.log('🗺️ Wanderlust - Iniciando aplicación...');
+  console.log('🗺️ wanderland - Iniciando aplicación...');
   console.log('📅 Versión: 0.2.0');
   console.log('🌐 Entorno:', window.location.hostname);
 

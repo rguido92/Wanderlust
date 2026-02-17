@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * Wanderlust - Configuration
+ * wanderland - Configuration
  * ==========================================================================
  * 
  * Configuración centralizada de la aplicación.
@@ -33,11 +33,11 @@ export const CONFIG = {
   // LocalStorage Keys
   // ==========================================================================
   STORAGE_KEYS: {
-    SEARCH_HISTORY: 'wanderlust_search_history',
-    USER_PREFERENCES: 'wanderlust_preferences',
-    THEME: 'wanderlust_theme',
-    RECENT_DESTINATIONS: 'wanderlust_recent_destinations',
-    SAVED_ITINERARIES: 'wanderlust_itineraries',
+    SEARCH_HISTORY: 'wanderland_search_history',
+    USER_PREFERENCES: 'wanderland_preferences',
+    THEME: 'wanderland_theme',
+    RECENT_DESTINATIONS: 'wanderland_recent_destinations',
+    SAVED_ITINERARIES: 'wanderland_itineraries',
   },
   
   // ==========================================================================
