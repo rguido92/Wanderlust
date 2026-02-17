@@ -12,7 +12,7 @@ body {
 }
 
 /* ==========================================================================
-   Header
+   Header - Mobile First Responsive
    ========================================================================== */
 
 .main-header {
@@ -32,14 +32,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-8);
+  gap: var(--space-10);
 }
 
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   color: var(--text-primary);
+  flex-shrink: 0; /*propiedad de Flexbox que define cuánto se encogerá un elemento flexible (flex item) para evitar desbordar su contenedor cuando no hay suficiente espacio*/
 }
 
 .logo svg {
@@ -48,34 +50,101 @@ body {
 }
 
 .logo h2 {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   font-weight: var(--font-bold);
 }
 
-/* Navigation */
+/* ==========================================================================
+   Navigation - Mobile Menu
+   ========================================================================== */
+
+/* Mobile: Menú hamburguesa oculto por defecto */
 .main-nav {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 85%;
+  max-width: 320px;
+  height: 100vh;
+  background-color: var(--surface);
+  padding: var(--space-8) var(--space-6);
+  box-shadow: var(--shadow-2xl);
+  transition: left var(--transition-base);
+  z-index: var(--z-modal);
+  overflow-y: auto;
   display: flex;
-  align-items: center;
-  gap: var(--space-6);
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
+/* Cuando el menú está abierto */
+.main-nav.open {
+  left: 0;
+}
+
+/* Overlay para cerrar menú al hacer click fuera */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+  z-index: calc(var(--z-modal) - 1);
+}
+
+.nav-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile nav links */
 .main-nav a {
+  display: block;
   color: var(--text-secondary);
   font-weight: var(--font-medium);
   font-size: var(--text-base);
-  transition: color var(--transition-base);
-  padding: var(--space-2) var(--space-3);
+  transition: color 0.2s ease;
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
 }
 
 .main-nav a:hover,
 .main-nav a:focus {
   color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary) 15%, transparent);
 }
 
 .main-nav a[aria-current="page"] {
   color: var(--primary);
   font-weight: var(--font-semibold);
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  transition: background-color var(--transition-fast);
+}
+
+.mobile-menu-toggle:hover,
+.mobile-menu-toggle:focus {
+  background-color: var(--surface-hover);
+}
+
+.mobile-menu-toggle svg {
+  width: 24px;
+  height: 24px;
 }
 
 /* Header Actions */
@@ -85,26 +154,73 @@ body {
   gap: var(--space-3);
 }
 
-/* Mobile Menu Toggle (oculto por ahora, agregar con JS después) */
-@media (max-width: 768px) {
+/* ==========================================================================
+   Breakpoint: Tablet (768px+)
+   ========================================================================== */
+@media (min-width: 768px) {
+  .logo h2 {
+    font-size: var(--text-xl);
+  }
+  
+  .header-content {
+    gap: var(--space-6);
+  }
+  
+  /* Ocultar toggle en tablet+ */
+  .mobile-menu-toggle {
+    display: none;
+  }
+  
+  /* Menú horizontal en tablet+ */
   .main-nav {
+    position: static;
+    width: auto;
+    max-width: none;
+    height: auto;
+    padding: 0;
+    box-shadow: none;
+    background-color: transparent;
+    flex-direction: row;
+    gap: var(--space-10);
+    overflow-y: visible;
+  }
+  
+  .main-nav a {
+    padding: var(--space-3) var(--space-5);
+  }
+  
+  /* Overlay no necesario en desktop */
+  .nav-overlay {
     display: none;
   }
 }
 
 /* ==========================================================================
-   Hero Section
+   Breakpoint: Desktop (1024px+)
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .main-nav {
+    gap: var(--space-12);
+  }
+  
+  .header-actions {
+    gap: var(--space-6);
+  }
+}
+
+/* ==========================================================================
+   Hero Section - Responsive
    ========================================================================== */
 
 .hero {
   position: relative;
-  min-height: 500px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: var(--space-20) var(--space-4);
+  padding: var(--space-16) var(--space-4);
   overflow: hidden;
 }
 
@@ -116,35 +232,87 @@ body {
   height: 100%;
   object-fit: cover;
   z-index: -1;
+  opacity: 0.3;
   mask-image: linear-gradient(to bottom, rgba(6, 24, 42, 1) 5%, rgba(6, 24, 42, 0) 80%);
   -webkit-mask-image: linear-gradient(to bottom, rgba(6, 24, 42, 1) 5%, rgba(6, 24, 42, 0) 80%);
 }
 
 .hero-content {
-  max-width: var(--container-md);
+  max-width: 90%;
+  width: 100%;
   z-index: var(--z-base);
 }
 
 .hero h1 {
-  font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+  font-size: var(--text-3xl);
   font-weight: var(--font-bold);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
   line-height: 1.2;
 }
 
 .hero p {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--text-secondary);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-12);
+  line-height: 1.6;
+}
+
+/* Tablet Hero */
+@media (min-width: 768px) {
+  .hero {
+    min-height: 500px;
+    padding: var(--space-20) var(--space-4);
+  }
+  
+  .hero-content {
+    max-width: 85%;
+  }
+  
+  .hero h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-6);
+  }
+  
+  .hero p {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-14);
+  }
+}
+
+/* Desktop Hero */
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 600px;
+    padding: var(--space-24) var(--space-4);
+  }
+  
+  .hero h1 {
+    font-size: var(--text-5xl);
+  }
+  
+  .hero-image {
+    opacity: 0.4;
+  }
+}
+
+/* Large Desktop Hero */
+@media (min-width: 1280px) {
+  .hero {
+    min-height: 650px;
+  }
+  
+  .hero h1 {
+    font-size: var(--text-6xl);
+  }
 }
 
 /* ==========================================================================
-   Features Section
+   Features Section - Responsive Grid
    ========================================================================== */
 
 .features {
   background-color: var(--background);
-  padding: var(--space-20) var(--space-4);
+  padding: var(--space-12) var(--space-4);
 }
 
 .features-container {
@@ -154,47 +322,89 @@ body {
 
 .section-header {
   text-align: center;
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-8);
 }
 
 .section-header h2 {
-  font-size: var(--text-4xl);
+  font-size: var(--text-3xl);
   font-weight: var(--font-bold);
   margin-bottom: var(--space-4);
   color: var(--text-primary);
 }
 
 .section-header p {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--text-muted);
-  max-width: var(--container-md);
+  max-width: var(--container-sm);
   margin: 0 auto;
+  line-height: 1.6;
 }
 
+/* Mobile: 1 columna */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-6);
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+/* Tablet: 2 columnas */
+@media (min-width: 640px) {
+  .features {
+    padding: var(--space-16) var(--space-4);
+  }
+  
+  .section-header {
+    margin-bottom: var(--space-10);
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+/* Desktop: 3 columnas */
+@media (min-width: 1024px) {
+  .features {
+    padding: var(--space-20) var(--space-4);
+  }
+  
+  .section-header h2 {
+    font-size: var(--text-4xl);
+  }
+  
+  .section-header p {
+    font-size: var(--text-lg);
+    max-width: var(--container-md);
+  }
+  
+  .section-header {
+    margin-bottom: var(--space-12);
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* ==========================================================================
-   Footer
+   Footer - Responsive
    ========================================================================== */
 
 .main-footer {
   background-color: var(--background);
   border-top: 1px solid var(--border);
   margin-top: auto;
-  padding: var(--space-16) var(--space-4) var(--space-8);
+  padding: var(--space-12) var(--space-4) var(--space-6);
 }
 
 .footer-content {
   max-width: var(--container-xl);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: var(--space-12);
-  margin-bottom: var(--space-12);
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
 }
 
 .footer-info .logo {
@@ -203,7 +413,14 @@ body {
 
 .footer-info p {
   color: var(--text-muted);
-  max-width: 300px;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
 }
 
 .footer-column h3 {
@@ -231,62 +448,105 @@ body {
 .footer-bottom {
   max-width: var(--container-xl);
   margin: 0 auto;
-  padding-top: var(--space-8);
+  padding-top: var(--space-6);
   border-top: 1px solid var(--border-light);
   text-align: center;
 }
 
 .footer-bottom small {
   color: var(--text-muted);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
 }
 
-/* ==========================================================================
-   Responsive Design
-   ========================================================================== */
-
-/* Tablet */
-@media (max-width: 1024px) {
+/* Tablet Footer: 2 columnas */
+@media (min-width: 640px) {
   .footer-content {
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
   }
   
   .footer-info {
     grid-column: 1 / -1;
   }
+  
+  .footer-nav {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-  .hero {
-    min-height: 400px;
-    padding: var(--space-12) var(--space-4);
-  }
-  
-  .hero h1 {
-    font-size: var(--text-2xl);
-  }
-  
-  .hero p {
-    font-size: var(--text-base);
-  }
-  
-  .features {
-    padding: var(--space-12) var(--space-4);
-  }
-  
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
+/* Desktop Footer: 4 columnas */
+@media (min-width: 1024px) {
+  .main-footer {
+    padding: var(--space-12) var(--space-4) var(--space-6);
   }
   
   .footer-content {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-10);
+    margin-bottom: var(--space-8);
   }
   
-  .main-footer {
-    padding: var(--space-12) var(--space-4) var(--space-6);
+  .footer-info {
+    grid-column: auto;
+  }
+  
+  .footer-nav {
+    grid-column: 2 / -1;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+  
+  .footer-info p {
+    max-width: 300px;
+  }
+  
+  .footer-bottom {
+    padding-top: var(--space-6);
+  }
+  
+  .footer-bottom small {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ==========================================================================
+   Container Utilities
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+.container-sm {
+  max-width: var(--container-sm);
+}
+
+.container-md {
+  max-width: var(--container-md);
+}
+
+.container-lg {
+  max-width: var(--container-lg);
+}
+
+.container-xl {
+  max-width: var(--container-xl);
+}
+
+.container-2xl {
+  max-width: var(--container-2xl);
+}
+
+/* Desktop: más padding horizontal */
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
   }
 }

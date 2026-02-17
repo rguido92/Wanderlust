@@ -21,6 +21,8 @@ const appState = {
   recentSearches: [],
 };
 
+
+
 // ==========================================================================
 // DOM Elements
 // ==========================================================================
@@ -261,3 +263,60 @@ if (document.readyState === 'loading') {
 // Exportar funciones para usar en otros módulos (opcional)
 // ==========================================================================
 export { validateSearch, saveSearchToHistory };
+
+
+// ==========================================================================
+// Mobile Menu Functionality
+// ==========================================================================
+
+const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+const mainNav = document.querySelector('.main-nav');
+const navOverlay = document.getElementById('nav-overlay');
+const navLinks = document.querySelectorAll('.main-nav a');
+
+function openMobileMenu() {
+  mainNav.classList.add('open');
+  navOverlay.classList.add('active');
+  if (mobileMenuToggle) {
+    mobileMenuToggle.setAttribute('aria-expanded', 'true');
+  }
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+  mainNav.classList.remove('open');
+  navOverlay.classList.remove('active');
+  if (mobileMenuToggle) {
+    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+  }
+  document.body.style.overflow = '';
+}
+
+// Toggle menú al hacer click en el botón
+if (mobileMenuToggle) {
+  mobileMenuToggle.addEventListener('click', () => {
+    if (mainNav.classList.contains('open')) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  });
+}
+
+// Cerrar al hacer click en overlay
+if (navOverlay) {
+  navOverlay.addEventListener('click', closeMobileMenu);
+}
+
+// Cerrar al hacer click en un link del menú
+navLinks.forEach(link => {
+  link.addEventListener('click', closeMobileMenu);
+});
+
+// Cerrar con tecla ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mainNav.classList.contains('open')) {
+    closeMobileMenu();
+  }
+});
+
